@@ -6,6 +6,168 @@
         xmlns:local="clr-namespace:ElBook.Form_Select"
         mc:Ignorable="d"
         Title="SelectForm" Height="250" Width="500" MouseLeftButtonDown="SelectForm_MouseLeftButtonDown" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Opacity="1" Foreground="{x:Null}"  AllowsTransparency="True" Background="{x:Null}">
+    <Window.Resources>
+
+        <Style x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                          x:Name="Border"
+                          Grid.ColumnSpan="2"
+                          CornerRadius="8"
+                          Background="{TemplateBinding Background}"
+                          BorderBrush="#FF593F21"
+                          BorderThickness="1" 
+                        />
+
+                            <Path
+                            x:Name="Arrow"
+                            Grid.Column="1"    
+                            Fill="{TemplateBinding Foreground}"
+                            Stroke="{TemplateBinding Foreground}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M 0 0 L 4 4 L 8 0 Z"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="TextBox">
+            <Border x:Name="PART_ContentHost" Focusable="True" />
+        </ControlTemplate>
+
+        <Style x:Key="theComboBox" TargetType="{x:Type ComboBox}">
+            <Setter Property="Foreground" Value="white" />
+            <Setter Property="BorderBrush" Value="#FF593F21" />
+            <Setter Property="Background" Value="#FF593F21" />
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="MinWidth" Value="150"/>
+            <Setter Property="MinHeight" Value="35"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton
+                            Cursor="Hand"
+                            Name="ToggleButton"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            Foreground="{TemplateBinding Foreground}"
+                            Style="{StaticResource ComboBoxToggleButton}"
+                            Grid.Column="2"
+                            Focusable="false"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press"/>
+
+                            <ContentPresenter
+                            Name="ContentSite"
+                            IsHitTestVisible="False"
+                            Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="10,3,30,3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                            Style="{x:Null}"
+                            Template="{StaticResource ComboBoxTextBox}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="3,3,23,3"
+                            Focusable="True"                               
+                            Visibility="Hidden"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup
+                            Name="Popup"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            PopupAnimation="Slide">
+                                <Grid
+                              Name="DropDown"
+                              SnapsToDevicePixels="True"               
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border
+                                    CornerRadius="8"
+                                    x:Name="DropDownBorder"
+                                    Background="#FF745634"
+                                    BorderThickness="1"
+                                    BorderBrush="#FF593F21"
+                                    />
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable" Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="theComboBoxItem" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border
+                        Name="Border"
+                        Padding="5"
+                        Margin="2"
+                        BorderThickness="2,0,0,0"
+                        CornerRadius="0"
+                        Background="Transparent"
+                        BorderBrush="Transparent">
+                            <TextBlock TextAlignment="Left">
+                            <ContentPresenter />
+                            </TextBlock>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="true">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#B3CB37"/>
+                                <Setter TargetName="Border" Property="Background" Value="#F8FAEB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
     <Grid Margin="0,0,-8,-8">
         <Border CornerRadius="10" Margin="7,5,16,18">
             <Border.Effect>
@@ -17,7 +179,215 @@
                     <GradientStop Color="#FF593F21" Offset="0.996"/>
                 </LinearGradientBrush>
             </Border.Background>
+            <Button x:Name="exitBut" Content="X"  HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="#FFFFEFEF" BorderBrush="Black" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Background="#FF593F21" Click="ExitBut_Click" Margin="441,10,10,0" RenderTransformOrigin="0.5,0.5" FontSize="20">
+
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Effect>
+                    <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+                </Button.Effect>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{x:Null}" />
+                        <Setter Property="Foreground" Value="#FF1C1C1C" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="1" BorderThickness="2" Margin="0,0,0,1">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+
+
+
+                                        <!-- Change color to red  -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#ff2b2b"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                            <Trigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFFFEFEF"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.ExitActions>
+                                        </Trigger>
+
+                                    </ControlTemplate.Triggers>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Border>
+        <TextBox x:Name="UsersTextBox" HorizontalAlignment="Center" Height="29" Margin="46,159,262,0" Text="ФИО" VerticalAlignment="Top" Width="200" Background="{x:Null}" Foreground="#FFFFEFEF" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" FontFamily="/ElBook;component/Res/#Steclo ExtLt" TextDecorations="{x:Null}" SelectionOpacity="100" FontStretch="ExtraExpanded" TextWrapping="Wrap" MaxLines="24" IsUndoEnabled="True" AutoWordSelection="True" CaretBrush="White" BorderThickness="1,5,1,1" TextAlignment="Center" ForceCursor="True" FontSize="20">
+            <TextBox.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.6"/>
+            </TextBox.Effect>
+
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+                    <Setter Property="FocusVisualStyle"   Value="{x:Null}" />
+                    <Setter Property="MinWidth" Value="100" />
+                    <Setter Property="MinHeight" Value="25" />
+                    <Setter Property="AllowDrop"  Value="true" />
+                    <Setter Property="BorderBrush" Value="#FFFFFFFF" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontFamily" Value="Helvetica" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Foreground" Value="#FFFFFFFF" />
+                    <Setter Property="CaretBrush" Value="White" />
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                                <Border x:Name="Border"
+                                    CornerRadius="7"
+                                    Padding="1"
+                                    BorderThickness="2"
+                                    Background="#FF593F21"
+                                    Margin="-3,2,3,-2">
+                                    <ScrollViewer Margin="0"
+                                        x:Name="PART_ContentHost" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <Button x:Name="addUsersBut" Content="+"  HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="White" BorderBrush="Black" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Background="#FF593F21" Click="addUsersBut_Click" Margin="18,161,468,0" RenderTransformOrigin="0.5,0.5" FontSize="20">
+
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+            </Button.Effect>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="Foreground" Value="#FF1C1C1C" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="1" BorderThickness="2" Margin="0,0,0,1">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                </Border>
+                                <ControlTemplate.Triggers>
+
+
+
+                                    <!-- Change color to red  -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#7F17A800"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFFFEFEF"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+
+                                </ControlTemplate.Triggers>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button x:Name="deleteUserBut" Content="-"  HorizontalContentAlignment="Center" Height="40"  VerticalAlignment="Top" Foreground="White" BorderBrush="Black" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Background="#FF593F21" Click="deleteUserBut_click" Margin="18,191,468,0" RenderTransformOrigin="0.5,0.5" FontSize="20">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+            </Button.Effect>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="Foreground" Value="#FF1C1C1C" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="1" BorderThickness="2" Margin="0,0,0,1">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                </Border>
+                                <ControlTemplate.Triggers>
+
+
+
+                                    <!-- Change color to red  -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#7FFF0000"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFFFEFEF"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+
+                                </ControlTemplate.Triggers>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
+        <ComboBox x:Name="UsersComboBox"  Style="{DynamicResource theComboBox}"  HorizontalAlignment="Left" Height="33" Margin="45,193,0,0" VerticalAlignment="Top" Width="197" Loaded="UsersComboBox_Loaded" Background="#FF593F21" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontSize="18">
+            <ComboBox.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.6"/>
+            </ComboBox.Effect>
+        </ComboBox>
 
 
 

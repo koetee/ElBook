@@ -25,7 +25,7 @@ namespace ElBook
         [Display(Name = "5")]
         a
     }
-    public class Customer
+    public class Customer 
     {
         public string FirstName { get; set; }
 
@@ -63,32 +63,37 @@ namespace ElBook
         public StateMark Mark31 { get; set; }
         #endregion
 
+        public override string ToString()
+        {
+            return FirstName;
+        }
     }
 
 
-
+    
     public partial class MainWindow : Window
     {
 
-       
+        public static List<Customer> users = new List<Customer>();
 
         public MainWindow()
         {
             InitializeComponent();
             //DataGridMain.ItemsSource = users
-            List<Customer> users = new List<Customer>();
+           
 
             users.Add(new Customer() { FirstName = "Лукьянов Владислав"});
           
             users.Add(new Customer() { FirstName = "Ли Дмитрий"});
 
 
-        
-            
 
 
 
-            DataGridMain.ItemsSource = users;
+
+
+           
+
 
         }
 
@@ -113,6 +118,14 @@ namespace ElBook
         {
            
             SForm.Show();
+        }
+
+        private void ReloadBut_Click(object sender, RoutedEventArgs e)
+        {
+            
+            DataGridMain.ItemsSource = users;
+            DataGridMain.Items.Refresh();
+           
         }
     }
 }

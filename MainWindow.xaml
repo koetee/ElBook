@@ -1,0 +1,448 @@
+﻿<Window x:Class="ElBook.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:ElBook"
+        
+         xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1000" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Opacity="1" Foreground="{x:Null}"  AllowsTransparency="True" Background="{x:Null}">
+    <Window.Resources>
+        
+        <Style TargetType="DataGrid">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+
+
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="ScrollViewer.CanContentScroll"
+          Value="true" />
+            <Setter Property="ScrollViewer.PanningMode"
+          Value="Both" />
+            <Setter Property="Stylus.IsFlicksEnabled"
+          Value="False" />
+        </Style>
+        <Style TargetType="{x:Type DataGridRowHeader}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+
+        </Style>
+        <Style TargetType="{x:Type DataGridRow}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Style and template for the resize control on the DataGridColumnHeader.-->
+        <Style x:Key="ColumnHeaderGripperStyle"
+       TargetType="{x:Type Thumb}">
+
+            <Setter Property="Width"
+          Value="8" />
+            <Setter Property="Background"
+          Value="Transparent" />
+            <Setter Property="Cursor"
+          Value="SizeWE" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="{TemplateBinding Background}"
+                Padding="{TemplateBinding Padding}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <!--Create list of enumeration values-->
+        <ObjectDataProvider x:Key="EnumDataSource"
+                            ObjectType="{x:Type System:Enum}"
+                            MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:StateMark" />
+            </ObjectDataProvider.MethodParameters>
+
+        </ObjectDataProvider>
+
+
+
+    </Window.Resources>
+
+    <Grid Margin="0,0,-8,-8">
+        <Border CornerRadius="10" Margin="0,0,10,10">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#A8773F"/>
+                    <GradientStop Color="#FFEAB77C" Offset="0.996"/>
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Button Name="exitBut" Content="X"  HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="#FFFFEFEF" BorderBrush="Black" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Background="#FF593F21" Click="ExitBut_Click" Margin="958,8,6,0" RenderTransformOrigin="0.5,0.5" FontSize="20">
+
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Effect>
+                    <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+                </Button.Effect>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{x:Null}" />
+                        <Setter Property="Foreground" Value="#FF1C1C1C" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="1" BorderThickness="2" Margin="0,0,0,1">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+
+
+
+                                        <!-- Change color to red  -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#ff2b2b"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                            <Trigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFFFEFEF"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.ExitActions>
+                                        </Trigger>
+
+                                    </ControlTemplate.Triggers>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
+        <Border CornerRadius="5" Margin="10,10,348,573">
+            <Border.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+            </Border.Effect>
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF593F21"/>
+
+                </LinearGradientBrush>
+            </Border.Background>
+            <Label Content="Электронный журнал " HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="168" Foreground="White" Margin="0,-1,0,0" FontFamily="Steclo ExtLt" FontSize="14"/>
+        </Border>
+        <Button x:Name="MinBut" Content="_" HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="#FFFFEFEF" BorderBrush="Black" FontFamily="O" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Background="#FF593F21" Click="MinBut_Click" Margin="923,8,51,0" RenderTransformOrigin="0.5,0.5" FontSize="20">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+            </Button.Effect>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="1" BorderThickness="2" Margin="0,0,0,1">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                </Border>
+                                <ControlTemplate.Triggers>
+
+
+
+                                    <!-- Change color to red  -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFA8A8A8"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFFFEFEF"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+
+                                </ControlTemplate.Triggers>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Border CornerRadius="5" Margin="10,40,23,20">
+            <Border.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+            </Border.Effect>
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#A8773F"/>
+                    <GradientStop Color="#FFEAB77C" Offset="0.996"/>
+
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Button x:Name="FormSh"  Content="Настройки" HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="#FFFFEFEF" BorderBrush="Black" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Click="FormSh_Click" Margin="653,-32,248,0" RenderTransformOrigin="0.5,0.5" Background="#FF593F21" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontSize="18">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Effect>
+                    <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.11"/>
+                </Button.Effect>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{x:Null}" />
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5" Padding="1" BorderThickness="2" Margin="0,0,0,1">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+
+
+
+                                        <!-- Change color to red  -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFA8A8A8"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                            <Trigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Duration="0:0:0.2" To="#FFFFEFEF"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.ExitActions>
+                                        </Trigger>
+
+                                    </ControlTemplate.Triggers>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
+
+
+        <Border CornerRadius="5" Margin="740,10,88,573">
+            <Border.Effect>
+                <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
+            </Border.Effect>
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF593F21"/>
+
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Grid/>
+        <Border CornerRadius ="40"  BorderThickness="1" HorizontalAlignment="Left" Height="496" Margin="32,66,0,0" VerticalAlignment="Top" Width="928">
+            <Grid HorizontalAlignment="Left" Height="495" VerticalAlignment="Top" Width="927" Margin="0,0,-1,-1">
+                <DataGrid  x:Name="DataGridMain" HorizontalAlignment="Left" Height="496" VerticalAlignment="Top" Width="927" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" AutoGenerateColumns="false" BorderBrush="{x:Null}" Background="#FF593F21" HorizontalGridLinesBrush="#59EAB77C" VerticalGridLinesBrush="#59EAB77C" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontSize="20" Margin="0,0,0,-1">
+                    <DataGrid.Effect>
+                        <DropShadowEffect RenderingBias="Quality" BlurRadius="14" Opacity="0.3" ShadowDepth="7"/>
+                    </DataGrid.Effect>
+
+
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ФИО"  
+                                    Binding="{Binding FirstName}" 
+                                           
+                                    IsReadOnly="True"
+                                    Width="150"/>
+                        <DataGridComboBoxColumn Header="1"  
+                                        SelectedItemBinding="{Binding Mark1}"
+                                        Width="25"
+                                      
+                                               
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        
+                        <DataGridComboBoxColumn Header="2"  
+                                        SelectedItemBinding="{Binding Mark2}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="3"  
+                                        SelectedItemBinding="{Binding Mark3}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="4"  
+                                        SelectedItemBinding="{Binding Mark4}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="5"  
+                                        SelectedItemBinding="{Binding Mark5}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+
+                        <DataGridComboBoxColumn Header="6"  
+                                        SelectedItemBinding="{Binding Mark6}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="7"  
+                                        SelectedItemBinding="{Binding Mark7}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="8"  
+                                        SelectedItemBinding="{Binding Mark8}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="9"  
+                                        SelectedItemBinding="{Binding Mark9}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="10"  
+                                        SelectedItemBinding="{Binding Mark10}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="11"  
+                                        SelectedItemBinding="{Binding Mark11}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="12"  
+                                        SelectedItemBinding="{Binding Mark12}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="13"  
+                                        SelectedItemBinding="{Binding Mark13}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="14"  
+                                        SelectedItemBinding="{Binding Mark14}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="15"  
+                                        SelectedItemBinding="{Binding Mark15}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="16"  
+                                        SelectedItemBinding="{Binding Mark16}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="17"  
+                                        SelectedItemBinding="{Binding Mark17}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="18"  
+                                        SelectedItemBinding="{Binding Mark18}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="19"  
+                                        SelectedItemBinding="{Binding Mark19}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="20"  
+                                        SelectedItemBinding="{Binding Mark20}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="21"  
+                                        SelectedItemBinding="{Binding Mark21}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="22"  
+                                        SelectedItemBinding="{Binding Mark22}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+
+                        <DataGridComboBoxColumn Header="23"  
+                                        SelectedItemBinding="{Binding Mark23}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="24"  
+                                        SelectedItemBinding="{Binding Mark24}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="25"  
+                                        SelectedItemBinding="{Binding Mark25}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="26"  
+                                        SelectedItemBinding="{Binding Mark26}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="27"  
+                                        SelectedItemBinding="{Binding Mark27}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="28"  
+                                        SelectedItemBinding="{Binding Mark28}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="29"  
+                                        SelectedItemBinding="{Binding Mark29}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="30"  
+                                        SelectedItemBinding="{Binding Mark30}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+                        <DataGridComboBoxColumn Header="31"  
+                                        SelectedItemBinding="{Binding Mark31}"
+                                        Width="25"
+                                        ItemsSource="{Binding Source={StaticResource EnumDataSource}}"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

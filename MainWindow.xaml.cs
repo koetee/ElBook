@@ -7,6 +7,10 @@ using System.Windows.Input;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Windows.Markup;
+using Newtonsoft.Json;
+using System.IO;
+using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace ElBook
 {
@@ -25,8 +29,9 @@ namespace ElBook
         [Display(Name = "5")]
         a
     }
-    public class Customer 
+    public class Customer : INotifyPropertyChanged
     {
+      
         public string FirstName { get; set; }
 
         #region mark
@@ -63,6 +68,16 @@ namespace ElBook
         public StateMark Mark31 { get; set; }
         #endregion
 
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+        #endregion
+
         public override string ToString()
         {
             return FirstName;
@@ -70,33 +85,37 @@ namespace ElBook
     }
 
 
-    
     public partial class MainWindow : Window
     {
-
         public static List<Customer> users = new List<Customer>();
+        public static string CurretJsonFile = "ПРД4020.json";
+
+        private static bool isUpdateMode;
 
         public MainWindow()
         {
             InitializeComponent();
+            IsUpdateMode = false;
+            SetTimer();
+        }
+        
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             //DataGridMain.ItemsSource = users
-           
+            
+            users = ObjectC.LoadUsers<List<Customer>>(CurretJsonFile);
+            DataGridMain.ItemsSource = users;
+            CurrentGroup.Content = CurretJsonFile;
+            
+            /*
+            users.Add(new Customer() { FirstName = "Лукьянов Владислав" });
 
-            users.Add(new Customer() { FirstName = "Лукьянов Владислав"});
-          
-            users.Add(new Customer() { FirstName = "Ли Дмитрий"});
-
-
-
-
-
-
-
-           
-
+            users.Add(new Customer() { FirstName = "Ли Дмитрий" });
+            */
 
         }
 
+        #region min exit nove form
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
@@ -104,6 +123,7 @@ namespace ElBook
 
         private void ExitBut_Click(object sender, RoutedEventArgs e)
         {
+            ObjectC.SaveUsers(CurretJsonFile);
             Environment.Exit(-1);
         }
 
@@ -112,20 +132,44 @@ namespace ElBook
             this.WindowState = WindowState.Minimized;
         }
 
+        #endregion
 
-        SelectForm SForm = new SelectForm();
+        #region init and show new form
+        readonly SelectForm SForm = new SelectForm();
+
+        public static bool IsUpdateMode { get => isUpdateMode; set => isUpdateMode = value; }
+
         private void FormSh_Click(object sender, RoutedEventArgs e)
         {
            
             SForm.Show();
         }
+        #endregion
 
-        private void ReloadBut_Click(object sender, RoutedEventArgs e)
+        #region update datagrid
+        public void ReloadBut_Click(object sender, RoutedEventArgs e)
         {
             
-            DataGridMain.ItemsSource = users;
             DataGridMain.Items.Refresh();
-           
         }
+
+        //Set and start the timer
+        protected void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            if (IsUpdateMode == true) //The Row is edited
+            {
+                DataGridMain.Items.Refresh();
+
+                IsUpdateMode = false;
+            }
+        }
+        private void SetTimer()
+        {
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+        }
+        #endregion
     }
 }

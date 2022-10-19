@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ElBook;
+using Newtonsoft.Json;
 
 namespace ElBook.Form_Select
 {
@@ -20,12 +22,24 @@ namespace ElBook.Form_Select
     /// </summary>
     public partial class SelectForm : Window
     {
-       
+        private void ForeachEntityCustomer()
+        {
+            List<string> usersTemp = new List<string>();
+            foreach (Customer aPart in MainWindow.users) {
+                usersTemp.Add(aPart.ToString());
+            }
+            UsersComboBox.ItemsSource = usersTemp;
+
+            ObjectC.SaveUsers(path: MainWindow.CurretJsonFile);
+           
+
+            MainWindow.IsUpdateMode = true;
+        }
 
         public SelectForm()
         {
             InitializeComponent();
-           
+            
         }
 
         private void SelectForm_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -42,29 +56,20 @@ namespace ElBook.Form_Select
         {
             MainWindow.users.Add(new Customer() { FirstName = UsersTextBox.Text });
 
-            UsersComboBox_Loaded(sender, e);
+            ForeachEntityCustomer();
         }
 
 
         private void UsersComboBox_Loaded(object sender, RoutedEventArgs e)
         {
-            List<string> usersTemp = new List<string>();
-            foreach (Customer aPart in MainWindow.users) {
-                usersTemp.Add(aPart.ToString());
-            }
-         
-            var combo = sender as ComboBox;
+            ForeachEntityCustomer();
 
-           
-
-            UsersComboBox.ItemsSource = usersTemp;
-            UsersComboBox.SelectedIndex = 1;
         }
 
         private void deleteUserBut_click(object sender, RoutedEventArgs e)
         {
             MainWindow.users.RemoveAt(UsersComboBox.SelectedIndex);
-            UsersComboBox_Loaded(sender, e);
+            ForeachEntityCustomer();
         }
     }
 }

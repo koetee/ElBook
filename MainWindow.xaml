@@ -7,9 +7,9 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ElBook"
         
-         xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+        
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Opacity="1" Foreground="{x:Null}"  AllowsTransparency="True" Background="{x:Null}">
+        Title="MainWindow" Height="600" Width="1000" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Opacity="1" Foreground="{x:Null}"  AllowsTransparency="True" Background="{x:Null}" Loaded="Window_Loaded">
     <Window.Resources>
         
         <Style TargetType="DataGrid">
@@ -148,7 +148,7 @@
                 </Button.Style>
             </Button>
         </Border>
-        <Border CornerRadius="5" Margin="10,10,438,573">
+        <Border CornerRadius="5" Margin="10,10,433,573">
             <Border.Effect>
                 <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
             </Border.Effect>
@@ -444,7 +444,7 @@
                 </DataGrid>
             </Grid>
         </Border>
-        <Button x:Name="ReloadBut"  Content="Обновить" HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="#FFFFEFEF" BorderBrush="Black" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Click="ReloadBut_Click" Margin="573,8,361,0" RenderTransformOrigin="0.5,0.5" Background="#FF593F21" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontSize="18">
+        <Button x:Name="ReloadBut"  Content="Обновить" HorizontalContentAlignment="Center" Height="30"  VerticalAlignment="Top" Foreground="#FFFFEFEF" BorderBrush="Black" FontStretch="ExtraExpanded"   BorderThickness="1,5,1,1" Click="ReloadBut_Click" Margin="578,8,356,0" RenderTransformOrigin="0.5,0.5" Background="#FF593F21" FontFamily="/ElBook;component/Res/#Steclo ExtLt" FontSize="18">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleX="1"/>
@@ -498,7 +498,7 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Border CornerRadius="5" Margin="650,10,348,573">
+        <Border CornerRadius="5" Margin="655,10,348,573">
             <Border.Effect>
                 <DropShadowEffect RenderingBias="Quality" ShadowDepth="2" BlurRadius="7" Opacity="0.3"/>
             </Border.Effect>
@@ -509,5 +509,6 @@
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
+        <Label x:Name="CurrentGroup" Content="init " HorizontalContentAlignment="Center"  HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="180" Foreground="White" Margin="740,10,0,0" FontFamily="Steclo ExtLt" FontSize="14"/>
     </Grid>
 </Window>
